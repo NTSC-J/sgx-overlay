@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <!-- maintainer-needed -->
+  <longdescription lang="en">
+    A daemon and libraries which allow user space applications to install
+    Java applets on DAL FW and communicate with them
+  </longdescription>
+</pkgmetadata>

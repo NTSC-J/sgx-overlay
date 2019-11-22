@@ -1,0 +1,26 @@
+diff -ru -p1 dynamic-application-loader-host-interface.orig/CMakeLists.txt dynamic-application-loader-host-interface/CMakeLists.txt
+--- dynamic-application-loader-host-interface.orig/CMakeLists.txt	2019-11-22 16:42:31.000000000 +0900
++++ dynamic-application-loader-host-interface/CMakeLists.txt	2019-11-22 16:43:26.000000000 +0900
+@@ -249,8 +249,2 @@ endif()
+ 
+-if(NOT APP_REPO_DIR)
+-    set(APP_REPO_DIR /var/cache/dal/applet_repository)
+-else()
+-    message("APP_REPO_DIR set to " ${APP_REPO_DIR} ".")
+-endif()
+-
+ configure_file(service/linux/jhi.conf.cmake
+@@ -262,3 +256,2 @@ if(${INIT_SYSTEM} MATCHES SysVinit)
+ 
+-    install(DIRECTORY DESTINATION ${APP_REPO_DIR})
+ else() # systemd, default.
+diff -ru -p1 dynamic-application-loader-host-interface.orig/service/linux/jhi.conf.cmake dynamic-application-loader-host-interface/service/linux/jhi.conf.cmake
+--- dynamic-application-loader-host-interface.orig/service/linux/jhi.conf.cmake	2019-11-21 15:04:00.000000000 +0900
++++ dynamic-application-loader-host-interface/service/linux/jhi.conf.cmake	2019-11-22 16:46:55.000000000 +0900
+@@ -65,3 +65,3 @@ socket_path /tmp/jhi_socket
+ applets_dir ${APPLETS_DIR}
+-app_repo_dir ${APP_REPO_DIR}
+-#
+\ No newline at end of file
++#app_repo_dir /var/cache/dal/applet_repository
++#
