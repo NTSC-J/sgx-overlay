@@ -9,7 +9,7 @@ DESCRIPTION="Intel Dynamic Application Loader Host Interface"
 HOMEPAGE="https://github.com/intel/dynamic-application-loader-host-interface"
 EGIT_REPO_URI="https://github.com/intel/dynamic-application-loader-host-interface.git"
 
-LICENSE="|| ( GPL-3 LGPL-3 )"
+LICENSE="Apache-2.0"
 SLOT="0"
 IUSE="systemd"
 KEYWORDS="~amd64"
