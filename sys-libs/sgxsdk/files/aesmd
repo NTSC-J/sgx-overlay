@@ -1,0 +1,17 @@
+#!/sbin/openrc-run
+
+export LD_LIBRARY_PATH=/opt/intel/sgxpsw/aesm
+command=/opt/intel/sgxpsw/aesm/aesm_service
+command_args="--no-daemon"
+command_background=true
+command_user="aesmd:aesmd"
+pidfile=/var/run/aesmd.pid
+name="Intel(R) Architectural Enclave Service Manager"
+
+depend() {
+	need jhi
+}
+
+start_pre() {
+	checkpath --directory --owner aesmd:aesmd --mode 0755 /var/run/aesmd
+}

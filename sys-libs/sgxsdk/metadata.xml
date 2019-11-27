@@ -4,5 +4,6 @@
   <!-- maintainer-needed -->
   <use>
     <flag name="opt_libs">Use optimized libs provided by Intel</flag>
+    <flag name="psw">Also install the platform software</flag>
   </use>
 </pkgmetadata>

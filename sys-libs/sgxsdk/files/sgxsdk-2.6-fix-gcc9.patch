@@ -1,0 +1,91 @@
+From 9f1af734c5ce5455f0fcdf118d9d8e6fbf5f73cd Mon Sep 17 00:00:00 2001
+From: xiangqua <xiangquan.liu@intel.com>
+Date: Fri, 27 Sep 2019 14:52:06 +0800
+Subject: [PATCH] Fix compile errors caused by gcc 9.x
+
+Signed-off-by: xiangqua <xiangquan.liu@intel.com>
+---
+ external/CppMicroServices/CMakeLists.txt                      | 2 +-
+ .../source/bundles/local_pseop_service_bundle/PSDAService.cpp | 4 ++--
+ .../aesm_service/source/core/ipc/UnixCommunicationSocket.cpp  | 2 +-
+ psw/uae_service/linux/Makefile                                | 2 +-
+ sdk/cpprt/linux/libunwind/autogen.sh                          | 4 ++--
+ 5 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/external/CppMicroServices/CMakeLists.txt b/external/CppMicroServices/CMakeLists.txt
+index 0e8a661c..ccc66d52 100644
+--- a/external/CppMicroServices/CMakeLists.txt
++++ b/external/CppMicroServices/CMakeLists.txt
+@@ -380,7 +380,7 @@ else()
+ 
+   foreach(_cxxflag  -Werror -Wall -Wextra -Wpointer-arith -Winvalid-pch -Wcast-align
+                     -Wwrite-strings -Woverloaded-virtual -Wnon-virtual-dtor -Wold-style-cast
+-                    -Wstrict-null-sentinel -Wsign-promo -fdiagnostics-show-option )
++                    -Wstrict-null-sentinel -Wsign-promo -fdiagnostics-show-option -Wno-deprecated-copy)
+     usFunctionCheckCompilerFlags(${_cxxflag} US_CXX_FLAGS)
+   endforeach()
+ 
+diff --git a/psw/ae/aesm_service/source/bundles/local_pseop_service_bundle/PSDAService.cpp b/psw/ae/aesm_service/source/bundles/local_pseop_service_bundle/PSDAService.cpp
+index 3e779e08..d5fda9b3 100644
+--- a/psw/ae/aesm_service/source/bundles/local_pseop_service_bundle/PSDAService.cpp
++++ b/psw/ae/aesm_service/source/bundles/local_pseop_service_bundle/PSDAService.cpp
+@@ -282,7 +282,7 @@ void PSDAService::stop_service()
+         psda_session_handle = NULL;
+         jhi_handle = NULL;
+     }
+-    catch (std::exception e)
++    catch (std::exception &e)
+     {
+     }
+ }
+@@ -344,7 +344,7 @@ bool PSDAService::is_session_active()
+         }
+         return false;
+     }
+-    catch (std::exception e)
++    catch (std::exception &e)
+     {
+         return false;
+     }
+diff --git a/psw/ae/aesm_service/source/core/ipc/UnixCommunicationSocket.cpp b/psw/ae/aesm_service/source/core/ipc/UnixCommunicationSocket.cpp
+index 65da1a6c..65df49f8 100644
+--- a/psw/ae/aesm_service/source/core/ipc/UnixCommunicationSocket.cpp
++++ b/psw/ae/aesm_service/source/core/ipc/UnixCommunicationSocket.cpp
+@@ -215,7 +215,7 @@ bool UnixCommunicationSocket::init()
+         memset(&serv_addr, 0, sizeof(struct sockaddr_un));
+         serv_addr.sun_family = AF_UNIX;
+         memset(serv_addr.sun_path, 0, sizeof(serv_addr.sun_path));
+-        strncpy(serv_addr.sun_path, mSocketBase, sizeof(serv_addr.sun_path));
++        strncpy(serv_addr.sun_path, mSocketBase, sizeof(serv_addr.sun_path) - 1);
+ 
+         if( connect(mSocket, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) != 0)
+         {
+diff --git a/psw/uae_service/linux/Makefile b/psw/uae_service/linux/Makefile
+index 24f63634..5bddaac3 100644
+--- a/psw/uae_service/linux/Makefile
++++ b/psw/uae_service/linux/Makefile
+@@ -162,7 +162,7 @@ $(IPC_SRC:.cpp=.o) : $(IPC_COMMON_PROTO_DIR)/messages.pb.cc
+ AEServicesImpl.o : $(IPC_COMMON_PROTO_DIR)/messages.pb.cc
+ 
+ messages.pb.o : $(IPC_COMMON_PROTO_DIR)/messages.pb.cc
+-	$(CXX) $(filter-out -Wshadow, $(CXXFLAGS)) -c $< -o $@
++	$(CXX) $(filter-out -Wshadow, $(CXXFLAGS)) -Wno-array-bounds -c $< -o $@
+ %.o :%.cpp
+ 	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
+ %.o: %.c
+diff --git a/sdk/cpprt/linux/libunwind/autogen.sh b/sdk/cpprt/linux/libunwind/autogen.sh
+index 47886fd5..094e6234 100755
+--- a/sdk/cpprt/linux/libunwind/autogen.sh
++++ b/sdk/cpprt/linux/libunwind/autogen.sh
+@@ -11,9 +11,9 @@ test -n "$srcdir" || srcdir=.
+ if [ "$1" = "1" ] 
+ then
+     #Build with "make DEBUG=1"
+-    COMMON_FLAGS="$CFLAGS -ggdb -Og"
++    COMMON_FLAGS="-ggdb -Og"
+ else
+-    COMMON_FLAGS="$CFLAGS -g -O2"
++    COMMON_FLAGS="-g -O2"
+ fi
+ CFLAGS="$COMMON_FLAGS -std=c99 -fno-builtin -DHAVE_SGX=1 -fPIC -DUNW_LOCAL_ONLY -fdebug-prefix-map=$(pwd)=/libunwind"
+ 
