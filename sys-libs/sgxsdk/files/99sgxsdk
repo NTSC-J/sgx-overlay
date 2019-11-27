@@ -1,0 +1,5 @@
+SGX_SDK="/opt/intel/sgxsdk"
+PATH="/opt/intel/sgxsdk/bin:/opt/intel/sgxsdk/bin/x64"
+LDPATH="/opt/intel/sgxsdk/sdk_libs"
+PKG_CONFIG_PATH="/opt/intel/sgxsdk/pkgconfig"
+
