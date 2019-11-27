@@ -1,0 +1,7 @@
+#!/sbin/openrc-run
+
+command=/usr/sbin/jhid
+command_background=true
+pidfile=/var/run/jhi.pid
+name="Intel(R) Dynamic Application Loader Host Interface"
+

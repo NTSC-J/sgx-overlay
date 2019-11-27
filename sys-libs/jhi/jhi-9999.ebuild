@@ -36,3 +36,12 @@ src_configure() {
 
 	cmake-utils_src_configure
 }
+
+src_install() {
+	cmake-utils_src_install
+
+	if ! use systemd; then
+		rm -f "${D}/etc/init.d/jhi"
+		doinitd "${FILESDIR}/jhi"
+	fi
+}
